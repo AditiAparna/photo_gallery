@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 var arr = [];
 export default class ImageCard extends React.Component {
@@ -13,14 +14,13 @@ export default class ImageCard extends React.Component {
 
   componentDidMount(){
       this.setState({searchQuery: this.props.searchQuery})
-      this.getData(this.state.searchQuery)
+      this.getData(this.props.searchQuery)
   }
 
   componentDidUpdate(prevProps){
       if(prevProps.searchQuery!==this.props.searchQuery){
-      console.log('hihhi', this.state)
-      this.setState({searchQuery: this.props.searchQuery},this.getData(this.state.searchQuery))
-    //   this.getData(this.state.searchQuery)
+        this.setState({searchQuery: this.props.searchQuery})
+        this.getData(this.props.searchQuery)
     }
   }
   getData = (val) => {
@@ -37,7 +37,6 @@ export default class ImageCard extends React.Component {
         url
       })
         .then((result) => {
-            console.log(result)
           this.setState({
             arr: result.data.photos.photo.map((photo) => {
               arr.push(photo);
@@ -54,8 +53,24 @@ export default class ImageCard extends React.Component {
     }
   };
 
+  fetchMoreData = () => {
+    // a fake async api call like which sends
+    // 20 more records in 1.5 secs
+    setTimeout(() => {
+      this.setState({
+        array: this.state.array.concat(Array.from({ length: 20 }))
+      });
+    }, 1500);
+  };
+
   render() {
     return (
+    <InfiniteScroll
+          dataLength={this.state.array.length}
+          next={()=>this.fetchMoreData}
+          hasMore={true}
+          loader={<h4>Loading...</h4>}
+        >
       <div className="cardContainer">
         {this.state.array.map((photo) => {
           return (
@@ -88,9 +103,14 @@ export default class ImageCard extends React.Component {
             </div>
           );
         })}
-        {/* {console.log(this.state)} */}
-        {/* {this.getData(this.state.searchQuery)} */}
+        
+        {/* <div class="d-flex justify-content-center load">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+          </div> */}
       </div>
+     </InfiniteScroll>
     );
   }
 }
