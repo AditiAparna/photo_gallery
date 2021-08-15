@@ -1,16 +1,16 @@
 import "./App.css";
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import ImageCard from "./component/imageCard";
 import Header from "./component/header";
 
-var arr = [];
+// var arr = [];
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      array: [],
+      // array: [],
       searchQuery: ''
     };
   }
@@ -21,34 +21,34 @@ export default class App extends React.Component {
     )
   }
 
-  getData = (val) => {
-    var url
-    if(val!==''){
-      url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&tags=${this.state.searchQuery}&per_page=500&api_key=6c6db8d2fa785c51287ee6885124756a&format=json&nojsoncallback=1&safe_search=1`;
-    } else{
-      url = `https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&per_page=500&api_key=6c6db8d2fa785c51287ee6885124756a&format=json&nojsoncallback=1&safe_search=1`;
-    }
-    try {
-      axios({
-        method: "get",
-        url
-      })
-        .then((result) => {
-          this.setState({
-            arr: result.data.photos.photo.map((photo) => {
-              arr.push(photo);
-              return photo;
-            })
-          });
-          this.setState({ array: arr });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  // getData = (val) => {
+  //   var url
+  //   if(val!==''){
+  //     url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&tags=${this.state.searchQuery}&per_page=500&api_key=6c6db8d2fa785c51287ee6885124756a&format=json&nojsoncallback=1&safe_search=1`;
+  //   } else{
+  //     url = `https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&per_page=500&api_key=6c6db8d2fa785c51287ee6885124756a&format=json&nojsoncallback=1&safe_search=1`;
+  //   }
+  //   try {
+  //     axios({
+  //       method: "get",
+  //       url
+  //     })
+  //       .then((result) => {
+  //         this.setState({
+  //           arr: result.data.photos.photo.map((photo) => {
+  //             arr.push(photo);
+  //             return photo;
+  //           })
+  //         });
+  //         this.setState({ array: arr });
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
   componentDidMount() {
     // this.getData(this.state.searchQuery);
@@ -64,7 +64,7 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <Header setSearchQuery={this.setSearchQuery} />
-        <ImageCard array={this.state.array}/>
+        <ImageCard searchQuery={this.state.searchQuery}/>
       </div>
     );
   }
